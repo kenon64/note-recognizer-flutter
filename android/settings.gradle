@@ -1,0 +1,123 @@
+# BUILD_GUIDE.md
+
+## 1. Установка Flutter SDK
+
+### Windows
+
+1. Установить Flutter SDK из официального сайта: https://flutter.dev/docs/get-started/install/windows
+2. Распаковать в `C:\src\flutter`
+3. Добавить `C:\src\flutter\bin` в `PATH`
+4. Перезапустить терминал
+
+### macOS
+
+```bash
+cd ~
+git clone https://github.com/flutter/flutter.git -b stable
+export PATH="$PATH:$HOME/flutter/bin"
+```
+
+### Linux
+
+```bash
+cd ~
+git clone https://github.com/flutter/flutter.git -b stable
+export PATH="$PATH:$HOME/flutter/bin"
+```
+
+## 2. Установка Android Studio
+
+1. Установить Android Studio
+2. Загрузить Android SDK
+3. Открыть SDK Manager
+4. Установить Android SDK Platform 34 / 35, Build Tools, Android SDK Command-line Tools
+5. Разрешить Flutter через Android Studio
+
+## 3. Проверка среды
+
+```bash
+flutter doctor
+```
+
+Если есть проблемы, устраните их до сборки.
+
+## 4. Установка зависимостей
+
+```bash
+flutter pub get
+```
+
+## 5. Сборка APK
+
+```bash
+flutter build apk --release
+```
+
+Готовый APK:
+
+```text
+build/app/outputs/flutter-apk/app-release.apk
+```
+
+## 6. Сборка по архитектурам
+
+```bash
+flutter build apk --release --split-per-abi
+```
+
+Результат:
+
+```text
+build/app/outputs/flutter-apk/
+  app-arm64-v8a-release.apk
+  app-armeabi-v7a-release.apk
+  app-x86_64-release.apk
+```
+
+## 7. Подписание APK
+
+### Создание keystore
+
+```bash
+keytool -genkeypair \
+  -v \
+  -keystore upload-keystore.jks \
+  -alias upload \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000
+```
+
+### android/key.properties
+
+```properties
+storePassword=YOUR_STORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=../upload-keystore.jks
+```
+
+### android/app/build.gradle
+
+Убедитесь, что `signingConfigs` и `buildTypes.release` настроены корректно.
+
+### Финальная сборка
+
+```bash
+flutter clean
+flutter pub get
+flutter build apk --release
+```
+
+## 8. Проверка подписания
+
+```bash
+apksigner verify --verbose build/app/outputs/flutter-apk/app-release.apk
+```
+
+## 9. Возможные ошибки
+
+- `Android license status unknown` — запустить `flutter doctor --android-licenses`
+- `No device connected` — подключить Android-устройство или запустить эмулятор
+- `Kotlin version mismatch` — обновить Kotlin Gradle plugin
+- `record` permission issue — проверить Android manifest и разрешения микрофона

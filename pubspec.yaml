@@ -1,5 +1,5 @@
 name: note_recognizer_flutter
-description: Android note and chord recognizer based on calibrated templates.
+description: Android note and chord recognizer.
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -10,11 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.0
-  path_provider: ^2.10.0
-  permission_handler: ^11.3.1
   record: ^5.2.1
+  permission_handler: ^11.3.1
   shared_preferences: ^2.4.3
-
 
 dev_dependencies:
   flutter_test:
